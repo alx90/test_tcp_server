@@ -35,12 +35,12 @@ int main(int argc, char **argv) {
   //Create socket
   socket_desc = socket(AF_INET , SOCK_STREAM , 0);
   if (socket_desc == -1) {
-    std::cerr << "Could not create socket!" << std::endl;
+    std::cerr << "Could not create socket: " << strerror(errno) << std::endl;
     return -1;
   }
   int enable = 1;
   if (setsockopt(socket_desc, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0) {
-    std::cerr << "setsockopt(SO_REUSEADDR) failed while creating socket!" << std::endl;
+    std::cerr << "Set socket options failed: " << strerror(errno) << std::endl;
     return -1;
   }
   std::cout << "Socket created successfully!" << std::endl;
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
   //Bind
   if( bind(socket_desc, (struct sockaddr *)&server, sizeof(server) ) < 0) {
-    std::cerr << "Socket bind failed!" << std::endl;
+    std::cerr << "Socket bind failed: " << strerror(errno) << std::endl;
     return -1;
   }
   std::cout << "Socket bind done!" << std::endl;
@@ -79,14 +79,14 @@ int main(int argc, char **argv) {
       // answer back to preset requests with preset responses
       if ( memcmp(recv_buffer,PRESET_REQUEST_1,MESSAGES_SIZE)==0 ) {
         if( write(*new_sock, PRESET_RESPONSE_1, MESSAGES_SIZE) != MESSAGES_SIZE )
-          std::cerr << "Error sending back response 1!" << std::endl;
+          std::cerr << "Error sending back response 1: " << strerror(errno) << std::endl;
         else
           std::cout << "Sent back response -> " << bytearray_hexdump(PRESET_RESPONSE_1, MESSAGES_SIZE) << std::endl;
 
 
       } else if ( memcmp(recv_buffer,PRESET_REQUEST_2,MESSAGES_SIZE)==0 ) {
         if( write(*new_sock, PRESET_RESPONSE_2, MESSAGES_SIZE) != MESSAGES_SIZE )
-          std::cerr << "Error sending back response 2!" << std::endl;
+          std::cerr << "Error sending back response 2: " << strerror(errno) << std::endl;
         else
           std::cout << "Sent back response -> " << bytearray_hexdump(PRESET_RESPONSE_2, MESSAGES_SIZE) << std::endl;
       }
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
     }
   }
   if (client_sock < 0) {
-    std::cerr << "Socket accept failed!" << std::endl;
+    std::cerr << "Socket accept failed: " << strerror(errno) << std::endl;
     return -1;
   }
 };
