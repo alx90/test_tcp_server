@@ -1,2 +1,13 @@
-# test_tcp_server
+# Test TCP Server
 Simple tcp server example, can be customized with preset requests/responses
+
+### Build and Execution
+compile using g++:
+```sh
+g++ test_tcp_server.out main.cpp
+```
+
+run program
+```sh
+./test_tcp_server.out
+```
